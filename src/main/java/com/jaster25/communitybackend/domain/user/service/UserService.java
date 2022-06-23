@@ -4,14 +4,18 @@ import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.domain.user.dto.UserRequestDto;
 import com.jaster25.communitybackend.domain.user.dto.UserResponseDto;
 import com.jaster25.communitybackend.domain.user.repository.UserRepository;
+import com.jaster25.communitybackend.global.config.security.UserAdapter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -36,5 +40,13 @@ public class UserService {
         return UserResponseDto.builder()
                 .id(userEntity.getUsername())
                 .build();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
+
+        return new UserAdapter(user);
     }
 }
