@@ -8,9 +8,9 @@ spring:
       path: /h2-console
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:community_db;NON_KEYWORDS=USER
-    username: sa
-    password:
+    url: ${H2_URL}
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create
@@ -25,3 +25,8 @@ logging:
       hibernate:
         type: trace
         SQL: debug
+
+jwt:
+  authorities-key: ${JWT_AUTHORITIES_KEY}
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expires-in: 7200 # 2 * 60 * 60
