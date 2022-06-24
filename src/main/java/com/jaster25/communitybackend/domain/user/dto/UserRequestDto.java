@@ -11,9 +11,9 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestDto {
 
-    @NotEmpty
+    @NotEmpty(message = "NOT_NULL_USER_ID")
     private String id;
-    @NotEmpty
+    @NotEmpty(message = "NOT_NULL_USER_PASSWORD")
     private String password;
 
     @Builder
