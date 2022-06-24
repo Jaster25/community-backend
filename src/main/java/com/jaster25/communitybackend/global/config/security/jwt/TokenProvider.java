@@ -33,9 +33,9 @@ public class TokenProvider implements InitializingBean {
 
     private Key decodedSecretKey;
 
-    public TokenProvider(@Value("${jwt.secret-key}") String decodedSecretKey,
-                         @Value("${jwt.authorities-key}") String authoritiesKey,
-                         @Value("${jwt.access-token-expires-in}") int accessTokenExpiresIn,
+    public TokenProvider(@Value("${JWT_SECRET_KEY}") String decodedSecretKey,
+                         @Value("${JWT_AUTHORITIES_KEY}") String authoritiesKey,
+                         @Value("${JWT_ACCESS_TOKEN_EXPIRES_IN}") int accessTokenExpiresIn,
                          @Lazy @Autowired UserService userService) {
         this.SECRET_KEY = decodedSecretKey;
         this.AUTHORITIES_KEY = authoritiesKey;

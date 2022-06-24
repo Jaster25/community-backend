@@ -2,35 +2,16 @@ server:
   port: 8080
 
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: ENC(StGqDEOMZHn+IwiGjnXp63BjpslfYcKq8hNQ4pbw796pKaFCQ7r4+U9/fIKtHaD1AwdZZYkmMS8=)
-    username: ENC(FZAeOFUrzKOmG9TDqvBLsA==)
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace
-        SQL: debug
+  profiles:
+    group:
+      dev:
+        - env
+        - h2
+      prod:
+        - env
+        - mysql
+    default: dev
 
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-
-jwt:
-  authorities-key: ENC(3Qaqo9HNjBlLxpU8vLWlGQ==)
-  secret-key: ENC(5G4MhSXN6xSQfeSy/0azX38QSfPQ1/rcvcUcw/+XYpKa1vU66asNYFU77Ww93rWaNah+jHNY+vhfSkZathmoapeJIp16HhGKRn4MTk+WI7s7UR3GnQNrHF12zLhN12i1ncXbci6Ne+U=)
-  access-token-expires-in: 7200 # 2 * 60 * 60
