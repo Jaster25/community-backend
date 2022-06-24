@@ -22,6 +22,7 @@ public enum ErrorCode {
     // 회원가입
     DUPLICATED_USER_ID("U201", "이미 존재하는 사용자 아이디입니다."),
     // 로그인
+    LOGIN_FAILURE("U301", "아이디 또는 비밀번호가 잘못 입력되었습니다.")
     ;
 
     private final String code;

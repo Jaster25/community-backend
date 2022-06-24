@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Entity
 @Getter
 @EqualsAndHashCode(callSuper = false)
@@ -32,7 +33,7 @@ public class UserEntity extends BaseTimeEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private final Set<Role> roles = new HashSet<>();
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
