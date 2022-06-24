@@ -18,12 +18,12 @@ public class ErrorResponse {
     private final LocalDateTime timestamp;
 
     @Builder
-    public ErrorResponse(String method, String path, String message, String code, LocalDateTime timestamp) {
+    public ErrorResponse(String method, String path, String message, String code) {
         this.method = method;
         this.path = path;
         this.message = message;
         this.code = code;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
     }
 
     public static ErrorResponse of(ErrorCode errorCode, HttpServletRequest request) {
