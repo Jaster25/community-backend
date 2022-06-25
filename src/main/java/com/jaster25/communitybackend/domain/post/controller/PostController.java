@@ -22,7 +22,11 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostDetailResponseDto> createPostApi(@CurrentUser UserEntity user,
                                                                @Valid @RequestBody PostRequestDto postRequestDto) {
+        System.out.println("PostController.createPostApi");
+        System.out.println("user = " + user);
+        System.out.println("postRequestDto = " + postRequestDto);
         PostDetailResponseDto postDetailResponseDto = postService.createPost(user, postRequestDto);
+        System.out.println("postDetailResponseDto = " + postDetailResponseDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(postDetailResponseDto);
     }
 }
