@@ -23,7 +23,6 @@ public class UserEntity extends BaseTimeEntity {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "user_id", columnDefinition = "uuid")
-//    @Column(name = "user_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -50,5 +49,9 @@ public class UserEntity extends BaseTimeEntity {
 
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
     }
 }

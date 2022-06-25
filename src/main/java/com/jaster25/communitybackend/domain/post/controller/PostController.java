@@ -32,4 +32,20 @@ public class PostController {
         PostDetailResponseDto postDetailResponseDto = postService.getPost(postId, user);
         return ResponseEntity.status(HttpStatus.OK).body(postDetailResponseDto);
     }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostDetailResponseDto> updatePostApi(@PathVariable Long postId,
+                                                            @CurrentUser UserEntity user,
+                                                               @Valid @RequestBody PostRequestDto postRequestDto) {
+        PostDetailResponseDto postDetailResponseDto = postService.updatePost(postId, user, postRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(postDetailResponseDto);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePostApi(@PathVariable Long postId,
+                                           @CurrentUser UserEntity user) {
+        postService.deletePost(postId, user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
