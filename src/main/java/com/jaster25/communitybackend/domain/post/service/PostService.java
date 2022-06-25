@@ -5,6 +5,8 @@ import com.jaster25.communitybackend.domain.post.dto.PostDetailResponseDto;
 import com.jaster25.communitybackend.domain.post.dto.PostRequestDto;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.global.exception.ErrorCode;
+import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,14 @@ public class PostService {
                 .content(postRequestDto.getContent())
                 .build();
         postRepository.save(post);
+        return PostDetailResponseDto.of(post);
+    }
+
+    @Transactional
+    public PostDetailResponseDto getPost(Long postId, UserEntity user) {
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_POST));
+        post.addViewCount();
         return PostDetailResponseDto.of(post);
     }
 }
