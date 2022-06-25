@@ -2,10 +2,7 @@ package com.jaster25.communitybackend.domain.post.domain;
 
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +35,13 @@ public class PostEntity extends BaseTimeEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public PostEntity(UserEntity user, String title, String content) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+    }
 
     public void update(String title, String content) {
         this.title = title;

@@ -51,6 +51,10 @@ public class SecurityConfig {
         http.apply(new JwtSecurityConfig(tokenProvider));
 
         http.authorizeRequests()
+                // User
+                .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+                // Post
+                .antMatchers(PREFIX_URL + "/posts").authenticated()
                 .anyRequest().permitAll();
 
         return http.build();
