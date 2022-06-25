@@ -20,7 +20,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
                 new UserAdapter(UserEntity.builder()
                         .id(UUID.fromString("b5368610-f48d-49a2-945c-74fc17890b14"))
                         .username("user1")
-                        .password("1234")
+                        .password("{bcrypt}$2a$10$sak6HBjaDTzojNAqoyWN5uk/h6futsWbUUSYOttdkATBlTzbYyj6O")
                         .build());
 
         Authentication auth =

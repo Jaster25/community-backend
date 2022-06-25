@@ -49,9 +49,8 @@ values ('b7b35ca2-93b6-4ae9-b505-cc32fc1674a9', 'ROLE_ADMIN');
 */
 -- user1이 작성한 게시물
 insert
-into post (post_id, created_at, content, title, updated_at, user_id, view_count)
-values (default,
-        '2020-01-23T23:34:32.550483',
+into post (created_at, content, title, updated_at, user_id, view_count)
+values ('2020-01-23T23:34:32.550483',
         '게시물 내용1',
         '게시물 제목1',
         null,
@@ -59,9 +58,8 @@ values (default,
         25);
 -- user1이 작성한 게시물
 insert
-into post (post_id, created_at, content, title, updated_at, user_id, view_count)
-values (default,
-        '2021-11-22T05:34:32.550483',
+into post (created_at, content, title, updated_at, user_id, view_count)
+values ('2021-11-22T05:34:32.550483',
         '게시물 내용2',
         '게시물 제목2',
         null,
@@ -69,9 +67,8 @@ values (default,
         13);
 -- user2이 작성한 게시물
 insert
-into post (post_id, created_at, content, title, updated_at, user_id, view_count)
-values (default,
-        '2022-06-25T23:34:32.550483',
+into post (created_at, content, title, updated_at, user_id, view_count)
+values ('2022-06-25T23:34:32.550483',
         '게시물 내용3',
         '게시물 제목3',
         null,
