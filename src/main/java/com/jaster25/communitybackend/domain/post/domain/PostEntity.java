@@ -37,7 +37,8 @@ public class PostEntity extends BaseTimeEntity {
     private LocalDateTime updatedAt;
 
     @Builder
-    public PostEntity(UserEntity user, String title, String content) {
+    public PostEntity(Long id, UserEntity user, String title, String content) {
+        this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;

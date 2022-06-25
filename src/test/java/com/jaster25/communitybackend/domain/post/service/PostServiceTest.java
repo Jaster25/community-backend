@@ -6,6 +6,7 @@ import com.jaster25.communitybackend.domain.post.dto.PostRequestDto;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.Role;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,5 +66,42 @@ class PostServiceTest {
         assertEquals(postRequestDto.getContent(), postDetailResponseDto.getContent());
         verify(postRepository, times(1))
                 .save(any(PostEntity.class));
+    }
+
+    @DisplayName("게시물 상세 조회 성공")
+    @Test
+    void getPost() throws Exception {
+        // given
+        PostEntity post = PostEntity.builder()
+                .title("게시물 제목")
+                .content("게시물 내용")
+                .user(user1)
+                .build();
+        given(postRepository.findById(anyLong()))
+                .willReturn(Optional.of(post));
+
+        // when
+        PostDetailResponseDto postDetailResponseDto = postService.getPost(1L, user1);
+
+        // then
+        assertEquals(post.getId(), postDetailResponseDto.getId());
+        assertEquals(post.getUser().getUsername(), postDetailResponseDto.getWriter());
+        assertEquals(post.getTitle(), postDetailResponseDto.getTitle());
+        assertEquals(post.getContent(), postDetailResponseDto.getContent());
+        verify(postRepository, times(1))
+                .findById(anyLong());
+    }
+
+    @DisplayName("게시물 상세 조회 실패 - 존재하지 않는 게시물 ID")
+    @Test
+    void getPost_nonExistentId() throws Exception {
+        // given
+        given(postRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(NonExistentException.class,
+                () -> postService.getPost(1L, user1));
     }
 }

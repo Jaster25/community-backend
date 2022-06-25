@@ -1,3 +1,6 @@
+/*
+    User
+*/
 -- user1
 insert
 into user (created_at, password, updated_at, username, user_id)
@@ -22,6 +25,9 @@ values ('2020-03-10T03:52:44.600374',
         'admin1',
         'b7b35ca2-93b6-4ae9-b505-cc32fc1674a9');
 
+/*
+    User Roles
+*/
 -- user1
 insert
 into user_roles (user_id, roles)
@@ -37,3 +43,37 @@ values ('b7b35ca2-93b6-4ae9-b505-cc32fc1674a9', 'ROLE_USER');
 insert
 into user_roles (user_id, roles)
 values ('b7b35ca2-93b6-4ae9-b505-cc32fc1674a9', 'ROLE_ADMIN');
+
+/*
+    Post
+*/
+-- user1이 작성한 게시물
+insert
+into post (post_id, created_at, content, title, updated_at, user_id, view_count)
+values (default,
+        '2020-01-23T23:34:32.550483',
+        '게시물 내용1',
+        '게시물 제목1',
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14',
+        25);
+-- user1이 작성한 게시물
+insert
+into post (post_id, created_at, content, title, updated_at, user_id, view_count)
+values (default,
+        '2021-11-22T05:34:32.550483',
+        '게시물 내용2',
+        '게시물 제목2',
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14',
+        13);
+-- user2이 작성한 게시물
+insert
+into post (post_id, created_at, content, title, updated_at, user_id, view_count)
+values (default,
+        '2022-06-25T23:34:32.550483',
+        '게시물 내용3',
+        '게시물 제목3',
+        null,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1',
+        5);
