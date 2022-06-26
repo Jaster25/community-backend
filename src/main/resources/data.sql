@@ -139,7 +139,7 @@ values ('2022-06-26T17:53:34.703794',
         1,
         null,
         '81a2c6ae-c324-4379-9618-858ff856c1e1');
--- user2이 게시물1 - 댓글6에 작성한 대댓글7
+-- user2이 게시물1 - 댓글5에 작성한 대댓글7
 insert
 into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
 values ('2022-06-26T17:53:34.703794',

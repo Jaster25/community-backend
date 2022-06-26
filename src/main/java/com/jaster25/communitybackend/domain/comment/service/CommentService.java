@@ -10,6 +10,8 @@ import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.exception.ErrorCode;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
+import com.jaster25.communitybackend.global.exception.custom.UnAuthenticatedException;
+import com.jaster25.communitybackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,5 +77,43 @@ public class CommentService {
         return CommentsResponseDto.builder()
                 .comments(commentResponseDtoList)
                 .build();
+    }
+
+    @Transactional
+    public CommentResponseDto updatePost(Long commentId, UserEntity user, CommentRequestDto commentRequestDto) {
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
+
+        verifyAuthorization(comment, user);
+        comment.update(commentRequestDto.getContent());
+        return CommentResponseDto.of(user, comment);
+    }
+
+    @Transactional
+    public void deletePost(Long commentId, UserEntity user) {
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
+
+        verifyAuthorization(comment, user);
+
+        comment.delete();
+
+        // 위로 올라가면서 제거
+        while (comment != null && comment.isDeleted() && comment.getChildren().size() == 0) {
+            CommentEntity parent = comment.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(comment);
+            }
+            commentRepository.delete(comment);
+            comment = parent;
+        }
+    }
+
+    private void verifyAuthorization(CommentEntity comment, UserEntity user) {
+        if (Objects.isNull(user)) {
+            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
+        } else if (!user.equals(comment.getUser()) && !user.isAdmin()) {
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
+        }
     }
 }
