@@ -42,7 +42,7 @@ public class CommentResponseDto {
                 .writer(comment.getUser().getUsername())
                 .content(comment.getContent())
                 .isDeleted(comment.isDeleted())
-                .canDelete(user.equals(comment.getUser()))
+                .canDelete(user != null && (user.equals(comment.getUser()) || user.isAdmin()))
                 .children(comment.getChildren().stream()
                         .map(c -> CommentResponseDto.of(user, c))
                         .collect(Collectors.toList()))

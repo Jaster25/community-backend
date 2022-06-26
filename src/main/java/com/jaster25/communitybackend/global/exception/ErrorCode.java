@@ -37,7 +37,7 @@ public enum ErrorCode {
      */
     NONEXISTENT_COMMENT("C001", "존재하지 않는 댓글입니다."),
     // 유효성 확인
-    NOT_NULL_COMMENT_CONTENT("P102", "댓글 내용은 필수입니다."),
+    NOT_NULL_COMMENT_CONTENT("C101", "댓글 내용은 필수입니다."),
 
     ;
 
