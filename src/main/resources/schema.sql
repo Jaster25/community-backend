@@ -16,12 +16,25 @@ create table user_roles
 
 create table post
 (
-    post_id    bigint       AUTO_INCREMENT not null,
+    post_id    bigint AUTO_INCREMENT not null,
     user_id    uuid,
-    title      varchar(255) not null,
-    content    clob         not null,
+    title      varchar(255)          not null,
+    content    clob                  not null,
     view_count integer,
     created_at timestamp,
     updated_at timestamp,
     primary key (post_id)
 );
+
+create table comment
+(
+    comment_id bigint AUTO_INCREMENT not null,
+    post_id    bigint,
+    user_id    uuid,
+    parent_id  bigint,
+    content    varchar(255)          not null,
+    is_deleted boolean               not null,
+    created_at timestamp,
+    updated_at timestamp,
+    primary key (comment_id)
+)
