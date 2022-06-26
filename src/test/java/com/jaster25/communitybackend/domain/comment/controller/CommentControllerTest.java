@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaster25.communitybackend.config.WithMockCustomAdmin;
 import com.jaster25.communitybackend.config.WithMockCustomUser;
 import com.jaster25.communitybackend.domain.comment.dto.CommentRequestDto;
-import com.jaster25.communitybackend.domain.post.dto.PostRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,8 +21,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -202,6 +200,144 @@ class CommentControllerTest {
                     .andExpect(jsonPath("$.comments[0].canDelete").value("true"))
                     .andExpect(jsonPath("$.comments[1].canDelete").value("true"))
                     .andExpect(jsonPath("$.comments[2].canDelete").value("true"));
+        }
+    }
+
+    @DisplayName("댓글 수정 API")
+    @Nested
+    class UpdateCommentApiTest {
+        @DisplayName("성공")
+        @Test
+        @WithMockCustomUser
+        void success() throws Exception {
+            // given
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+
+            // when
+            ResultActions result = mvc.perform(put(PREFIX_URL + "/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .content(objectMapper.writeValueAsString(commentRequestDto)));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").exists())
+                    .andExpect(jsonPath("$.writer").value("user1"))
+                    .andExpect(jsonPath("$.content").value("수정된 댓글 내용1"));
+        }
+
+        @DisplayName("성공 - 관리자")
+        @Test
+        @WithMockCustomAdmin
+        void success_admin() throws Exception {
+            // given
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+
+            // when
+            ResultActions result = mvc.perform(put(PREFIX_URL + "/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .content(objectMapper.writeValueAsString(commentRequestDto)));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").exists())
+                    .andExpect(jsonPath("$.writer").value("user1"))
+                    .andExpect(jsonPath("$.content").value("수정된 댓글 내용1"));
+        }
+
+        @DisplayName("실패 - 다른 작성자")
+        @Test
+        @WithMockCustomUser
+        void failure_otherUser() throws Exception {
+            // given
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+
+            // when
+            ResultActions result = mvc.perform(put(PREFIX_URL + "/2")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .content(objectMapper.writeValueAsString(commentRequestDto)));
+
+            // then
+            result.andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.code").value("G003"));
+        }
+
+        @DisplayName("실패 - 비로그인")
+        @Test
+        void failure_notLoggedIn() throws Exception {
+            // given
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+
+            // when
+            ResultActions result = mvc.perform(put(PREFIX_URL + "/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .content(objectMapper.writeValueAsString(commentRequestDto)));
+
+            // then
+            result.andExpect(status().isUnauthorized());
+        }
+    }
+
+    @DisplayName("댓글 삭제 API")
+    @Nested
+    class DeleteCommentApiTest {
+        @DisplayName("성공")
+        @Test
+        @WithMockCustomUser
+        void success() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(delete(PREFIX_URL + "/1"));
+
+            // then
+            result.andExpect(status().isNoContent());
+        }
+
+        @DisplayName("성공 - 관리자")
+        @Test
+        @WithMockCustomAdmin
+        void success_admin() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(delete(PREFIX_URL + "/1"));
+
+            // then
+            result.andExpect(status().isNoContent());
+        }
+
+        @DisplayName("실패 - 다른 작성자")
+        @Test
+        @WithMockCustomUser
+        void failure_otherUser() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(delete(PREFIX_URL + "/2"));
+
+            // then
+            result.andExpect(status().isForbidden())
+                    .andExpect(jsonPath("$.code").value("G003"));
+        }
+
+        @DisplayName("실패 - 비로그인")
+        @Test
+        void failure_notLoggedIn() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(delete(PREFIX_URL + "/1"));
+
+            // then
+            result.andExpect(status().isUnauthorized());
         }
     }
 }

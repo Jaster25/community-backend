@@ -80,7 +80,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updatePost(Long commentId, UserEntity user, CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(Long commentId, UserEntity user, CommentRequestDto commentRequestDto) {
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
 
@@ -90,7 +90,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deletePost(Long commentId, UserEntity user) {
+    public void deleteComment(Long commentId, UserEntity user) {
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
 

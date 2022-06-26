@@ -44,14 +44,14 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> updateCommentApi(@PathVariable Long commentId,
                                                                @CurrentUser UserEntity user,
                                                                @RequestBody CommentRequestDto commentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.updatePost(commentId, user, commentRequestDto);
+        CommentResponseDto commentResponseDto = commentService.updateComment(commentId, user, commentRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(commentResponseDto);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> deleteCommentApi(@PathVariable Long commentId,
                                                                @CurrentUser UserEntity user) {
-        commentService.deletePost(commentId, user);
+        commentService.deleteComment(commentId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

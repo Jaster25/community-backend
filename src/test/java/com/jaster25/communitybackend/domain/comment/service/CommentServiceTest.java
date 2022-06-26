@@ -10,6 +10,7 @@ import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.Role;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
+import com.jaster25.communitybackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -230,6 +233,168 @@ class CommentServiceTest {
             // then
             assertThrows(NonExistentException.class,
                     () -> commentService.getComments(1L, user1, null, 10));
+        }
+    }
+
+    @DisplayName("댓글 수정")
+    @Nested
+    class UpdateCommentTest {
+        @DisplayName("성공")
+        @Test
+        void success() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            CommentResponseDto commentResponseDto = commentService.updateComment(1L, user1, commentRequestDto);
+
+            // then
+            assertEquals(commentRequestDto.getContent(), commentResponseDto.getContent());
+            assertEquals(user1.getUsername(), commentResponseDto.getWriter());
+        }
+
+        @DisplayName("성공 - 관리자")
+        @Test
+        void success_admin() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            CommentResponseDto commentResponseDto = commentService.updateComment(1L, admin1, commentRequestDto);
+
+            // then
+            assertEquals(commentRequestDto.getContent(), commentResponseDto.getContent());
+            assertEquals(user1.getUsername(), commentResponseDto.getWriter());
+        }
+
+        @DisplayName("실패 - 존재하지 않는 댓글 ID")
+        @Test
+        void failure_nonExistentParentCommentId() throws Exception {
+            // given
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.empty());
+
+            // when
+            // then
+            assertThrows(NonExistentException.class,
+                    () -> commentService.updateComment(1L, user1, commentRequestDto));
+        }
+
+        @DisplayName("실패 - 다른 작성자")
+        @Test
+        void failure_otherWriter() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user2)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            CommentRequestDto commentRequestDto = CommentRequestDto.builder()
+                    .content("수정된 댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            // then
+            assertThrows(UnAuthorizedException.class,
+                    () -> commentService.updateComment(1L, user1, commentRequestDto));
+        }
+    }
+
+    @DisplayName("댓글 삭제")
+    @Nested
+    class DeleteCommentTest {
+        @DisplayName("성공")
+        @Test
+        void success() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            commentService.deleteComment(1L, user1);
+
+            // then
+            verify(commentRepository, times(1)).findById(anyLong());
+            verify(commentRepository, times(1)).delete(any(CommentEntity.class));
+        }
+
+        @DisplayName("성공 - 관리자")
+        @Test
+        void success_admin() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            commentService.deleteComment(1L, admin1);
+
+            // then
+            verify(commentRepository, times(1)).findById(anyLong());
+            verify(commentRepository, times(1)).delete(any(CommentEntity.class));
+        }
+
+        @DisplayName("실패 - 존재하지 않는 댓글 ID")
+        @Test
+        void failure_nonExistentParentCommentId() throws Exception {
+            // given
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.empty());
+
+            // when
+            // then
+            assertThrows(NonExistentException.class,
+                    () -> commentService.deleteComment(1L, user1));
+        }
+
+        @DisplayName("실패 - 다른 작성자")
+        @Test
+        void failure_otherWriter() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user2)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            // then
+            assertThrows(UnAuthorizedException.class,
+                    () -> commentService.deleteComment(1L, user1));
         }
     }
 }
