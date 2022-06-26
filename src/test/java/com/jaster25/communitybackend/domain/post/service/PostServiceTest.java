@@ -3,6 +3,7 @@ package com.jaster25.communitybackend.domain.post.service;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.post.dto.PostDetailResponseDto;
 import com.jaster25.communitybackend.domain.post.dto.PostRequestDto;
+import com.jaster25.communitybackend.domain.post.dto.PostsResponseDto;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.Role;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
@@ -16,12 +17,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -71,6 +75,42 @@ class PostServiceTest {
             assertEquals(postRequestDto.getTitle(), postDetailResponseDto.getTitle());
             assertEquals(postRequestDto.getContent(), postDetailResponseDto.getContent());
             verify(postRepository, times(1)).save(any(PostEntity.class));
+        }
+    }
+
+    @DisplayName("게시물 목록 조회")
+    @Nested
+    class GetPostsTest {
+        @DisplayName("성공 - 제목으로 검색")
+        @Test
+        void success() throws Exception {
+            // given
+            PostEntity post1 = PostEntity.builder()
+                    .user(user1)
+                    .title("게시물 제목1")
+                    .content("게시물 내용1")
+                    .build();
+            PostEntity post2 = PostEntity.builder()
+                    .user(user1)
+                    .title("게시물 제목2")
+                    .content("게시물 내용2")
+                    .build();
+            PostEntity post3 = PostEntity.builder()
+                    .user(user2)
+                    .title("게시물 제목3")
+                    .content("게시물 내용3")
+                    .build();
+            List<PostEntity> posts = List.of(post1, post2, post3);
+            Page<PostEntity> postPage = new PageImpl<>(posts);
+            given(postRepository.findAllByTitleContainingIgnoreCase(any(Pageable.class), anyString()))
+                    .willReturn(postPage);
+
+            // when
+            PostsResponseDto postsResponseDto = postService.getPosts(1, 10, "title", "제목");
+
+            // then
+            assertEquals(3, postsResponseDto.getPage().getTotalElement());
+            assertEquals(1, postsResponseDto.getPage().getTotalPage());
         }
     }
 

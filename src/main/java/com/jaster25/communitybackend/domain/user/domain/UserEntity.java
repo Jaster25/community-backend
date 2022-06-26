@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"id", "username", "password"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity extends BaseTimeEntity {
 
     @Id

@@ -1,10 +1,10 @@
-create table user
+create table users
 (
     user_id    uuid         not null,
-    created_at timestamp    not null,
     password   varchar(255) not null,
-    updated_at timestamp,
     username   varchar(255) not null,
+    created_at timestamp,
+    updated_at timestamp,
     primary key (user_id)
 );
 
@@ -17,11 +17,11 @@ create table user_roles
 create table post
 (
     post_id    bigint       AUTO_INCREMENT not null,
-    created_at timestamp    not null,
-    content    clob         not null,
-    title      varchar(255) not null,
-    updated_at timestamp,
-    view_count integer,
     user_id    uuid,
+    title      varchar(255) not null,
+    content    clob         not null,
+    view_count integer,
+    created_at timestamp,
+    updated_at timestamp,
     primary key (post_id)
 );

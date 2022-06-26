@@ -52,8 +52,6 @@ public class PostService {
             postPage = postRepository.findAllByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(pageable, keyword, keyword);
         }
 
-        System.out.println("postPage.getContent() = " + postPage.getContent());
-
         List<PostResponseDto> postResponseDtoList = postPage.stream()
                 .map(PostResponseDto::of)
                 .collect(Collectors.toList());

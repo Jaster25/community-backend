@@ -115,6 +115,85 @@ class PostControllerTest {
         }
     }
 
+    @DisplayName("게시물 목록 조회 API")
+    @Nested
+    class GetPostsApiTest {
+        @DisplayName("성공")
+        @Test
+        void success() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(get(PREFIX_URL));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page.totalPage").value("1"))
+                    .andExpect(jsonPath("$.page.totalElement").value("3"))
+                    .andExpect(jsonPath("$.posts").exists())
+                    .andExpect(jsonPath("$.posts.size()").value("3"));
+        }
+
+        @DisplayName("성공 - 제목으로 검색")
+        @Test
+        void success_byTitle() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(get(PREFIX_URL + "?searchType=title&keyword=제목1"));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page.totalPage").value("1"))
+                    .andExpect(jsonPath("$.page.totalElement").value("1"))
+                    .andExpect(jsonPath("$.posts").exists())
+                    .andExpect(jsonPath("$.posts[0].title").value("게시물 제목1"));
+        }
+
+        @DisplayName("성공 - 내용으로 검색")
+        @Test
+        void success_byContent() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(get(PREFIX_URL + "?searchType=content&keyword=내용2"));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page.totalPage").value("1"))
+                    .andExpect(jsonPath("$.page.totalElement").value("1"))
+                    .andExpect(jsonPath("$.posts").exists())
+                    .andExpect(jsonPath("$.posts.size()").value("1"));
+        }
+
+        @DisplayName("성공 - 제목+내용으로 검색")
+        @Test
+        void success_byTitleAndContent() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(get(PREFIX_URL + "?searchType=titleAndContent&keyword=내용3"));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page.totalPage").value("1"))
+                    .andExpect(jsonPath("$.page.totalElement").value("1"))
+                    .andExpect(jsonPath("$.posts").exists())
+                    .andExpect(jsonPath("$.posts[0].title").value("게시물 제목3"));
+        }
+
+        @DisplayName("성공 - 작성자로 검색")
+        @Test
+        void success_byWriter() throws Exception {
+            // given
+            // when
+            ResultActions result = mvc.perform(get(PREFIX_URL + "?searchType=writer&keyword=user1"));
+
+            // then
+            result.andExpect(status().isOk())
+                    .andExpect(jsonPath("$.page.totalPage").value("1"))
+                    .andExpect(jsonPath("$.page.totalElement").value("2"))
+                    .andExpect(jsonPath("$.posts").exists())
+                    .andExpect(jsonPath("$.posts.size()").value("2"));
+        }
+    }
+
     @DisplayName("게시물 상세 조회 API")
     @Nested
     class GetPostApiTest {
