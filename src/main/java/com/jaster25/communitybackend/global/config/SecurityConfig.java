@@ -8,6 +8,7 @@ import com.jaster25.communitybackend.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -51,6 +52,12 @@ public class SecurityConfig {
         http.apply(new JwtSecurityConfig(tokenProvider));
 
         http.authorizeRequests()
+                // User
+                .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+                // Post
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/posts").authenticated()
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/posts/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/posts/**").authenticated()
                 .anyRequest().permitAll();
 
         return http.build();

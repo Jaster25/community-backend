@@ -1,6 +1,6 @@
 package com.jaster25.communitybackend.global.exception;
 
-import com.jaster25.communitybackend.global.exception.custom.DuplicatedValueException;
+import com.jaster25.communitybackend.global.exception.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,10 +21,43 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(value = InvalidValueException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidValueException(InvalidValueException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception exception, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_REQUEST, request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    /**
+     * HttpStatus: 401
+     */
+    @ExceptionHandler(value = UnAuthenticatedException.class)
+    public ResponseEntity<ErrorResponse> handleUnAuthenticatedException(UnAuthenticatedException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    /**
+     * HttpStatus: 403
+     */
+    @ExceptionHandler(value = UnAuthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnAuthorizedException(UnAuthorizedException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    /**
+     * HttpStatus: 404
+     */
+    @ExceptionHandler(value = NonExistentException.class)
+    public ResponseEntity<ErrorResponse> handleNonExistentException(NonExistentException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     /**

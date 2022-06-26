@@ -13,15 +13,15 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, of = {"id", "username", "password"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "user_id", columnDefinition = "BINARY(16)")
+    @Column(name = "user_id", columnDefinition = "uuid")
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -39,9 +39,18 @@ public class UserEntity extends BaseTimeEntity {
     private LocalDateTime updatedAt;
 
     @Builder
-    public UserEntity(String username, String password) {
+    public UserEntity(UUID id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.roles.add(Role.ROLE_USER);
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
     }
 }
