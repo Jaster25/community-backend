@@ -2,6 +2,7 @@ package com.jaster25.communitybackend.domain.post.controller;
 
 import com.jaster25.communitybackend.domain.post.dto.PostDetailResponseDto;
 import com.jaster25.communitybackend.domain.post.dto.PostRequestDto;
+import com.jaster25.communitybackend.domain.post.dto.PostsResponseDto;
 import com.jaster25.communitybackend.domain.post.service.PostService;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.common.CurrentUser;
@@ -26,6 +27,15 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postDetailResponseDto);
     }
 
+    @GetMapping
+    public ResponseEntity<PostsResponseDto> getPostsApi(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                        @RequestParam(value = "size", defaultValue = "10") int size,
+                                                        @RequestParam(value = "searchType", defaultValue = "title") String searchType,
+                                                        @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        PostsResponseDto postsResponseDto = postService.getPosts(page, size, searchType, keyword);
+        return ResponseEntity.status(HttpStatus.OK).body(postsResponseDto);
+    }
+
     @GetMapping("/{postId}")
     public ResponseEntity<PostDetailResponseDto> getPostApi(@PathVariable Long postId,
                                                             @CurrentUser UserEntity user) {
@@ -35,7 +45,7 @@ public class PostController {
 
     @PutMapping("/{postId}")
     public ResponseEntity<PostDetailResponseDto> updatePostApi(@PathVariable Long postId,
-                                                            @CurrentUser UserEntity user,
+                                                               @CurrentUser UserEntity user,
                                                                @Valid @RequestBody PostRequestDto postRequestDto) {
         PostDetailResponseDto postDetailResponseDto = postService.updatePost(postId, user, postRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(postDetailResponseDto);
@@ -43,7 +53,7 @@ public class PostController {
 
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePostApi(@PathVariable Long postId,
-                                           @CurrentUser UserEntity user) {
+                                              @CurrentUser UserEntity user) {
         postService.deletePost(postId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
