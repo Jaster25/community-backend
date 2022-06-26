@@ -75,3 +75,77 @@ values ('2022-06-25T23:34:32.550483',
         null,
         '81a2c6ae-c324-4379-9618-858ff856c1e1',
         5);
+
+/*
+    Comment
+*/
+-- user1이 게시물1에 작성한 댓글1
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-05-26T17:53:34.703794',
+        '댓글 내용1',
+        false,
+        null,
+        1,
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14');
+-- user2이 게시물1에 작성한 댓글2
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용2',
+        false,
+        null,
+        1,
+        null,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1');
+-- user1이 게시물1에 작성한 댓글3
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용3',
+        false,
+        null,
+        1,
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14');
+-- user1이 게시물2에 작성한 댓글4
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용4',
+        false,
+        null,
+        2,
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14');
+-- user1이 게시물1 - 댓글2에 작성한 대댓글5
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용5',
+        true,
+        2,
+        1,
+        null,
+        'b5368610-f48d-49a2-945c-74fc17890b14');
+-- user2이 게시물1 - 댓글2에 작성한 대댓글6
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용6',
+        false,
+        2,
+        1,
+        null,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1');
+-- user2이 게시물1 - 댓글5에 작성한 대댓글7
+insert
+into comment (created_at, content, is_deleted, parent_id, post_id, updated_at, user_id)
+values ('2022-06-26T17:53:34.703794',
+        '댓글 내용7',
+        false,
+        5,
+        1,
+        null,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1');

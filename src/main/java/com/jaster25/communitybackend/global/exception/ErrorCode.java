@@ -6,11 +6,11 @@ import lombok.Getter;
 public enum ErrorCode {
 
     /**
-     * C: 공통
+     * G: Global
      */
-    INVALID_REQUEST("C001", "잘못된 요청입니다."),
-    NONEXISTENT_AUTHENTICATION("C002", "로그인이 필요합니다."),
-    NONEXISTENT_AUTHORIZATION("C003", "권한이 없습니다."),
+    INVALID_REQUEST("G001", "잘못된 요청입니다."),
+    NONEXISTENT_AUTHENTICATION("G002", "로그인이 필요합니다."),
+    NONEXISTENT_AUTHORIZATION("G003", "권한이 없습니다."),
 
     /**
      * U: User
@@ -29,8 +29,15 @@ public enum ErrorCode {
      */
     NONEXISTENT_POST("P001", "존재하지 않는 게시물입니다."),
     // 유효성 확인
-    NOT_NULL_POST_TITLE("P101", "제목은 필수입니다."),
-    NOT_NULL_POST_CONTENT("P102", "내용은 필수입니다."),
+    NOT_NULL_POST_TITLE("P101", "게시물 제목은 필수입니다."),
+    NOT_NULL_POST_CONTENT("P102", "게시물 내용은 필수입니다."),
+
+    /**
+     * C: Comment
+     */
+    NONEXISTENT_COMMENT("C001", "존재하지 않는 댓글입니다."),
+    // 유효성 확인
+    NOT_NULL_COMMENT_CONTENT("C101", "댓글 내용은 필수입니다."),
 
     ;
 
