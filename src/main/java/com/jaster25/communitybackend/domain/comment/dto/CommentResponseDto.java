@@ -44,7 +44,7 @@ public class CommentResponseDto {
                 .isDeleted(comment.isDeleted())
                 .canDelete(user.equals(comment.getUser()))
                 .children(comment.getChildren().stream()
-                        .map((c -> CommentResponseDto.of(user, c)))
+                        .map(c -> CommentResponseDto.of(user, c))
                         .collect(Collectors.toList()))
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
