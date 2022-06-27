@@ -39,6 +39,14 @@ public enum ErrorCode {
     // 유효성 확인
     NOT_NULL_COMMENT_CONTENT("C101", "댓글 내용은 필수입니다."),
 
+    /**
+     * L: Like
+     */
+    NONEXISTENT_LIKE("L001", "존재하지 않는 좋아요입니다."),
+    // 중복
+    DUPLICATED_LIKE_POST("L101", "이미 좋아요를 누른 게시물입니다."),
+    DUPLICATED_LIKE_COMMENT("L102", "이미 좋아요를 누른 댓글입니다."),
+
     ;
 
     private final String code;

@@ -62,6 +62,9 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/comments").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/comments/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/comments/**").authenticated()
+                // Like
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/likes/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/likes/**").authenticated()
                 .anyRequest().permitAll();
 
         return http.build();

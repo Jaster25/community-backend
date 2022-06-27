@@ -37,4 +37,22 @@ create table comment
     created_at timestamp,
     updated_at timestamp,
     primary key (comment_id)
-)
+);
+
+create table like_post
+(
+    like_post_id bigint AUTO_INCREMENT not null,
+    post_id      bigint,
+    user_id      uuid,
+    created_at   timestamp,
+    primary key (like_post_id)
+);
+
+create table like_comment
+(
+    like_comment_id bigint AUTO_INCREMENT not null,
+    comment_id      bigint,
+    user_id         uuid,
+    created_at      timestamp,
+    primary key (like_comment_id)
+);
