@@ -149,3 +149,35 @@ values ('2022-06-26T17:53:34.703794',
         1,
         null,
         '81a2c6ae-c324-4379-9618-858ff856c1e1');
+
+/*
+    Like Post
+*/
+-- user1이 게시물1 좋아요
+insert
+into like_post (post_id, user_id, created_at)
+values (1,
+        'b5368610-f48d-49a2-945c-74fc17890b14',
+        '2022-07-01T13:00:34.703794');
+-- user2이 게시물1 좋아요
+insert
+into like_post (post_id, user_id, created_at)
+values (1,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1',
+        '2022-07-01T13:00:34.703794');
+
+/*
+    Like Comment
+*/
+-- user1이 댓글1 좋아요
+insert
+into like_comment (comment_id, user_id, created_at)
+values (1,
+        'b5368610-f48d-49a2-945c-74fc17890b14',
+        '2022-07-01T13:00:34.703794');
+-- user2이 댓글1 좋아요
+insert
+into like_comment (comment_id, user_id, created_at)
+values (1,
+        '81a2c6ae-c324-4379-9618-858ff856c1e1',
+        '2022-07-01T13:00:34.703794');

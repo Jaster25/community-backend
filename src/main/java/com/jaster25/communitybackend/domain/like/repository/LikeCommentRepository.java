@@ -10,5 +10,5 @@ public interface LikeCommentRepository extends JpaRepository<LikeCommentEntity, 
 
     int countByCommentId(Long commentId);
 
-    Optional<LikeCommentEntity> findByUserAndComment_Id(UserEntity user, Long commentId);
+    Optional<LikeCommentEntity> findByUserAndCommentId(UserEntity user, Long commentId);
 }

@@ -32,7 +32,7 @@ public class LikeService {
     public LikeResponseDto createLikePost(Long postId, UserEntity user) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_POST));
-        if (likePostRepository.findByUserAndPost_Id(user, postId).orElse(null) != null) {
+        if (likePostRepository.findByUserAndPostId(user, postId).orElse(null) != null) {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_LIKE_POST);
         }
 
@@ -52,8 +52,8 @@ public class LikeService {
     public void deleteLikePost(Long postId, UserEntity user) {
         postRepository.findById(postId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_POST));
-        LikePostEntity like = likePostRepository.findByUserAndPost_Id(user, postId)
-                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE));
+        LikePostEntity like = likePostRepository.findByUserAndPostId(user, postId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE_POST));
 
         if (!user.equals(like.getUser())) {
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
@@ -67,7 +67,7 @@ public class LikeService {
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_POST));
 
         int likeCount = likePostRepository.countByPostId(postId);
-        boolean isLiked = likePostRepository.findByUserAndPost_Id(user, postId).orElse(null) != null;
+        boolean isLiked = likePostRepository.findByUserAndPostId(user, postId).orElse(null) != null;
 
         return LikeResponseDto.builder()
                 .likeCount(likeCount)
@@ -79,7 +79,7 @@ public class LikeService {
     public LikeResponseDto createLikeComment(Long commentId, UserEntity user) {
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
-        if (likeCommentRepository.findByUserAndComment_Id(user, commentId).orElse(null) != null) {
+        if (likeCommentRepository.findByUserAndCommentId(user, commentId).orElse(null) != null) {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_LIKE_COMMENT);
         }
 
@@ -99,8 +99,8 @@ public class LikeService {
     public void deleteLikeComment(Long commentId, UserEntity user) {
         commentRepository.findById(commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
-        LikeCommentEntity like = likeCommentRepository.findByUserAndComment_Id(user, commentId)
-                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE));
+        LikeCommentEntity like = likeCommentRepository.findByUserAndCommentId(user, commentId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE_COMMENT));
 
         if (!user.equals(like.getUser())) {
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
@@ -114,7 +114,7 @@ public class LikeService {
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
 
         int likeCount = likeCommentRepository.countByCommentId(commentId);
-        boolean isLiked = likeCommentRepository.findByUserAndComment_Id(user, commentId).orElse(null) != null;
+        boolean isLiked = likeCommentRepository.findByUserAndCommentId(user, commentId).orElse(null) != null;
 
         return LikeResponseDto.builder()
                 .likeCount(likeCount)

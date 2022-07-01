@@ -42,7 +42,8 @@ public enum ErrorCode {
     /**
      * L: Like
      */
-    NONEXISTENT_LIKE("L001", "존재하지 않는 좋아요입니다."),
+    NONEXISTENT_LIKE_POST("L001", "좋아요를 누르지 않은 게시물입니다."),
+    NONEXISTENT_LIKE_COMMENT("L002", "좋아요를 누르지 않은 댓글입니다."),
     // 중복
     DUPLICATED_LIKE_POST("L101", "이미 좋아요를 누른 게시물입니다."),
     DUPLICATED_LIKE_COMMENT("L102", "이미 좋아요를 누른 댓글입니다."),
