@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
      * */
     @ExceptionHandler(value = DuplicatedValueException.class)
     public ResponseEntity<ErrorResponse> handleDuplicatedValueException(DuplicatedValueException exception, HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.DUPLICATED_USER_ID, request);
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }
