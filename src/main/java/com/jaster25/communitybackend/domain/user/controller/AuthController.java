@@ -2,6 +2,7 @@ package com.jaster25.communitybackend.domain.user.controller;
 
 
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.dto.AuthResponseDto;
 import com.jaster25.communitybackend.domain.user.dto.LogInRequestDto;
 import com.jaster25.communitybackend.domain.user.dto.TokenResponseDto;
 import com.jaster25.communitybackend.domain.user.service.AuthService;
@@ -19,6 +20,12 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+
+    @GetMapping
+    public ResponseEntity<AuthResponseDto> authApi(@CurrentUser UserEntity user) {
+        AuthResponseDto authResponseDto = authService.getAuth(user);
+        return ResponseEntity.status(HttpStatus.OK).body(authResponseDto);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> logInApi(@RequestBody @Valid LogInRequestDto logInRequestDto) {
