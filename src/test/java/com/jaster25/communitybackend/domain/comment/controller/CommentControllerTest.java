@@ -166,9 +166,11 @@ class CommentControllerTest {
             result.andExpect(status().isOk())
                     .andExpect(jsonPath("$.comments.size()").value("3"))
                     .andExpect(jsonPath("$.comments[0].canDelete").value("true"))
+                    .andExpect(jsonPath("$.comments[0].likeCount").value("0"))
                     .andExpect(jsonPath("$.comments[1].canDelete").value("false"))
                     .andExpect(jsonPath("$.comments[1].children.size()").value("2"))
-                    .andExpect(jsonPath("$.comments[2].canDelete").value("true"));
+                    .andExpect(jsonPath("$.comments[2].canDelete").value("true"))
+                    .andExpect(jsonPath("$.comments[-1].likeCount").value("2"));
         }
 
         @DisplayName("성공 - 비로그인")
