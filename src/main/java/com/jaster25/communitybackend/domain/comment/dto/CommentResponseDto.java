@@ -18,6 +18,7 @@ public class CommentResponseDto {
     private final String content;
     private final Boolean isDeleted;
     private final Boolean canDelete;
+    private final int likeCount;
     private final List<CommentResponseDto> children;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
@@ -25,12 +26,13 @@ public class CommentResponseDto {
     private final LocalDateTime updatedAt;
 
     @Builder
-    private CommentResponseDto(Long id, String writer, String content, Boolean isDeleted, Boolean canDelete, List<CommentResponseDto> children, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private CommentResponseDto(Long id, String writer, String content, Boolean isDeleted, Boolean canDelete, int likeCount, List<CommentResponseDto> children, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.writer = writer;
         this.content = content;
         this.isDeleted = isDeleted;
         this.canDelete = canDelete;
+        this.likeCount = likeCount;
         this.children = children;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -43,6 +45,7 @@ public class CommentResponseDto {
                 .content(comment.getContent())
                 .isDeleted(comment.isDeleted())
                 .canDelete(user != null && (user.equals(comment.getUser()) || user.isAdmin()))
+                .likeCount(comment.getLikes().size())
                 .children(comment.getChildren().stream()
                         .map(c -> CommentResponseDto.of(user, c))
                         .collect(Collectors.toList()))

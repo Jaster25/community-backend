@@ -1,5 +1,6 @@
 package com.jaster25.communitybackend.domain.comment.domain;
 
+import com.jaster25.communitybackend.domain.like.domain.LikeCommentEntity;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.common.BaseTimeEntity;
@@ -34,6 +35,9 @@ public class CommentEntity extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "comment")
+    private List<LikeCommentEntity> likes = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

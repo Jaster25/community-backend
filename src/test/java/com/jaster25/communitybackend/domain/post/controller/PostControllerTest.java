@@ -130,7 +130,10 @@ class PostControllerTest {
                     .andExpect(jsonPath("$.page.totalPage").value("1"))
                     .andExpect(jsonPath("$.page.totalElement").value("3"))
                     .andExpect(jsonPath("$.posts").exists())
-                    .andExpect(jsonPath("$.posts.size()").value("3"));
+                    .andExpect(jsonPath("$.posts.size()").value("3"))
+                    .andExpect(jsonPath("$.posts[0].likeCount").value("0"))
+                    .andExpect(jsonPath("$.posts[1].likeCount").value("0"))
+                    .andExpect(jsonPath("$.posts[-1].likeCount").value("2"));
         }
 
         @DisplayName("성공 - 제목으로 검색")
