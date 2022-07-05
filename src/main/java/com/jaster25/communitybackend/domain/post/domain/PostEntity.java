@@ -1,11 +1,14 @@
 package com.jaster25.communitybackend.domain.post.domain;
 
+import com.jaster25.communitybackend.domain.like.domain.LikePostEntity;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +34,9 @@ public class PostEntity extends BaseTimeEntity {
 
     @Column(name = "view_count")
     private int viewCount = 0;
+
+    @OneToMany(mappedBy = "post")
+    private List<LikePostEntity> likes = new ArrayList<>();
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

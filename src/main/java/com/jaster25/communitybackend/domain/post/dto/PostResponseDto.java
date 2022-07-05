@@ -14,15 +14,17 @@ public class PostResponseDto {
     private final String writer;
     private final String title;
     private final int viewCount;
+    private final int likeCount;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
 
     @Builder
-    public PostResponseDto(Long id, String writer, String title, int viewCount, LocalDateTime createdAt) {
+    public PostResponseDto(Long id, String writer, String title, int viewCount, int likeCount, LocalDateTime createdAt) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.viewCount = viewCount;
+        this.likeCount = likeCount;
         this.createdAt = createdAt;
     }
 
@@ -32,6 +34,7 @@ public class PostResponseDto {
                 .writer(post.getUser().getUsername())
                 .title(post.getTitle())
                 .viewCount(post.getViewCount())
+                .likeCount(post.getLikes().size())
                 .createdAt(post.getCreatedAt())
                 .build();
     }
