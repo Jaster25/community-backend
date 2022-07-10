@@ -35,14 +35,18 @@ public class UserEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private final Set<Role> roles = new HashSet<>();
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Builder
-    public UserEntity(UUID id, String username, String password) {
+    public UserEntity(UUID id, String username, String password, String profileImageUrl) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.profileImageUrl = profileImageUrl;
         this.roles.add(Role.ROLE_USER);
     }
 
@@ -52,5 +56,9 @@ public class UserEntity extends BaseTimeEntity {
 
     public boolean isAdmin() {
         return roles.contains(Role.ROLE_ADMIN);
+    }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
