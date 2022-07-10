@@ -47,6 +47,11 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
+
+	/**
+	 * Spring Cloud
+	 */
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 }
 
 tasks.named('test') {
