@@ -48,6 +48,12 @@ public enum ErrorCode {
     DUPLICATED_LIKE_POST("L101", "이미 좋아요를 누른 게시물입니다."),
     DUPLICATED_LIKE_COMMENT("L102", "이미 좋아요를 누른 댓글입니다."),
 
+    /**
+     * F: File
+     */
+    FILE_UPLOAD_FAILURE("F001", "파일 업로드에 실패했습니다."),
+    EMPTY_FILE("F002", "비어있는 파일입니다."),
+    INVALID_FILE_NAME("F003", "유효하지 않은 파일명입니다."),
     ;
 
     private final String code;

@@ -21,9 +21,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(value = FileUploadException.class)
+    public ResponseEntity<ErrorResponse> handleFileUploadException(FileUploadException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(value = InvalidValueException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidValueException(InvalidValueException e, HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
+    public ResponseEntity<ErrorResponse> handleInvalidValueException(InvalidValueException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
