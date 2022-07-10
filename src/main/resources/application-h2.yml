@@ -23,3 +23,7 @@ logging:
       hibernate:
         type: trace
         SQL: debug
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
