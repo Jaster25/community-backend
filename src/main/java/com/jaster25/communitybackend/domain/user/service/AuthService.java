@@ -27,14 +27,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public AuthResponseDto getAuth(UserEntity user) {
-        return AuthResponseDto.builder()
-                .username(user != null ? user.getUsername() : null)
-                .roles(user != null
-                        ? user.getRoles().stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.toSet())
-                        : null)
-                .build();
+        return AuthResponseDto.of(user);
     }
 
     @Transactional

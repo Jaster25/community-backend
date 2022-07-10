@@ -54,6 +54,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 // User
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+                .antMatchers(PREFIX_URL + "/users/me/profile-image").authenticated()
                 // Post
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/posts").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/posts/**").authenticated()
