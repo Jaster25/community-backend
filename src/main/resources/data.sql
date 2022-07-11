@@ -3,30 +3,33 @@
 */
 -- user1
 insert
-into users (created_at, password, updated_at, username, user_id, profile_image_url)
+into users (created_at, password, updated_at, username, user_id, profile_image_url, point)
 values ('2021-12-21T12:35:31.406332',
         '{bcrypt}$2a$10$sak6HBjaDTzojNAqoyWN5uk/h6futsWbUUSYOttdkATBlTzbYyj6O',
         null,
         'user1',
         'b5368610-f48d-49a2-945c-74fc17890b14',
-        's3://community-backend-bucket/upload/pianist_1657413387008.png');
+        's3://community-backend-bucket/upload/pianist_1657413387008.png',
+        1932);
 -- user2
 insert
-into users (created_at, password, updated_at, username, user_id, profile_image_url)
+into users (created_at, password, updated_at, username, user_id, profile_image_url, point)
 values ('2022-06-23T20:53:34.336388',
         '{bcrypt}$2a$10$7GDT5AxvRScIUaFNHXtwre12o.WCzjfNyDnggDHAlXiV1tZr.IEYS',
         null,
         'user2',
         '81a2c6ae-c324-4379-9618-858ff856c1e1',
-        's3://community-backend-bucket/upload/inferno-bomb_1657413379431.png');
+        's3://community-backend-bucket/upload/inferno-bomb_1657413379431.png',
+        105);
 -- admin1
 insert
-into users (created_at, password, updated_at, username, user_id)
+into users (created_at, password, updated_at, username, user_id, point)
 values ('2020-03-10T03:52:44.600374',
         '{bcrypt}$2a$10$bkyXPgVXuRXmRa9d34FI2OUAteBNZi0BN8EYkG.loOSK/D2CR9jYO',
         null,
         'admin1',
-        'b7b35ca2-93b6-4ae9-b505-cc32fc1674a9');
+        'b7b35ca2-93b6-4ae9-b505-cc32fc1674a9',
+        999);
 
 /*
     User Roles

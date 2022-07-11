@@ -4,6 +4,7 @@ create table users
     password          varchar(255) not null,
     username          varchar(255) not null,
     profile_image_url varchar(255),
+    point             integer,
     created_at        timestamp,
     updated_at        timestamp,
     primary key (user_id)
