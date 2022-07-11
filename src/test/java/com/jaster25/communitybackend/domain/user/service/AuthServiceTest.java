@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -37,7 +38,6 @@ class AuthServiceTest {
         admin1.addRole(Role.ROLE_ADMIN);
     }
 
-
     @DisplayName("사용자 정보 조회")
     @Nested
     class GetAuthApiTest {
@@ -49,7 +49,7 @@ class AuthServiceTest {
             AuthResponseDto authResponseDto = authService.getAuth(user1);
 
             // then
-            assertEquals("user1", authResponseDto.getUsername());
+            assertEquals("user1", authResponseDto.getId());
             assertEquals(Set.of(Role.ROLE_USER.toString()), authResponseDto.getRoles());
         }
 
@@ -61,7 +61,7 @@ class AuthServiceTest {
             AuthResponseDto authResponseDto = authService.getAuth(null);
 
             // then
-            assertNull(authResponseDto.getUsername());
+            assertNull(authResponseDto.getId());
             assertNull(authResponseDto.getRoles());
         }
 
@@ -73,9 +73,8 @@ class AuthServiceTest {
             AuthResponseDto authResponseDto = authService.getAuth(admin1);
 
             // then
-            assertEquals("admin1", authResponseDto.getUsername());
+            assertEquals("admin1", authResponseDto.getId());
             assertEquals(Set.of(Role.ROLE_USER.toString(), Role.ROLE_ADMIN.toString()), authResponseDto.getRoles());
         }
     }
 }
-

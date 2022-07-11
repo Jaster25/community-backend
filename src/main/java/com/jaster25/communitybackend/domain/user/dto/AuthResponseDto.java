@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 @Getter
 public class AuthResponseDto {
 
-    private final String username;
+    private final String id;
     private final Set<String> roles;
     private final String profileImageUrl;
     private final int level;
     private final int point;
 
     @Builder
-    private AuthResponseDto(String username, Set<String> roles, String profileImageUrl, int level, int point) {
-        this.username = username;
+    private AuthResponseDto(String id, Set<String> roles, String profileImageUrl, int level, int point) {
+        this.id = id;
         this.roles = roles;
         this.profileImageUrl = profileImageUrl;
         this.level = level;
@@ -27,7 +27,7 @@ public class AuthResponseDto {
 
     public static AuthResponseDto of(UserEntity user) {
         return AuthResponseDto.builder()
-                .username(user != null ? user.getUsername() : null)
+                .id(user != null ? user.getUsername() : null)
                 .roles(user != null
                         ? user.getRoles().stream()
                         .map(String::valueOf)
