@@ -36,6 +36,7 @@ public class AuthResponseDto {
                 .profileImageUrl(user != null
                         ? user.getProfileImageUrl()
                         : null)
+                .point(user != null ? user.getPoint() : 0)
                 .build();
     }
 }

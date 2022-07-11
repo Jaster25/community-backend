@@ -7,7 +7,9 @@ import com.jaster25.communitybackend.domain.comment.dto.CommentsResponseDto;
 import com.jaster25.communitybackend.domain.comment.repository.CommentRepository;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
+import com.jaster25.communitybackend.domain.user.domain.Point;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.ErrorCode;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import com.jaster25.communitybackend.global.exception.custom.UnAuthenticatedException;
@@ -30,6 +32,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public CommentResponseDto createComment(Long postId, UserEntity user, CommentRequestDto commentRequestDto) {
@@ -42,6 +45,10 @@ public class CommentService {
                 .content(commentRequestDto.getContent())
                 .build();
         commentRepository.save(comment);
+
+        user.addPoint(Point.CREATE_COMMENT);
+        userRepository.save(user);
+
         return CommentResponseDto.of(user, comment);
     }
 

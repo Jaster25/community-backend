@@ -3,7 +3,9 @@ package com.jaster25.communitybackend.domain.post.service;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.post.dto.*;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
+import com.jaster25.communitybackend.domain.user.domain.Point;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.ErrorCode;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import com.jaster25.communitybackend.global.exception.custom.UnAuthenticatedException;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public PostDetailResponseDto createPost(UserEntity user, PostRequestDto postRequestDto) {
@@ -35,6 +38,10 @@ public class PostService {
                 .content(postRequestDto.getContent())
                 .build();
         postRepository.save(post);
+
+        user.addPoint(Point.CREATE_POST);
+        userRepository.save(user);
+
         return PostDetailResponseDto.of(post);
     }
 

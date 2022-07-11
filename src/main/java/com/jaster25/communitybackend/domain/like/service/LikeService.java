@@ -9,7 +9,9 @@ import com.jaster25.communitybackend.domain.like.repository.LikeCommentRepositor
 import com.jaster25.communitybackend.domain.like.repository.LikePostRepository;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
+import com.jaster25.communitybackend.domain.user.domain.Point;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.ErrorCode;
 import com.jaster25.communitybackend.global.exception.custom.DuplicatedValueException;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
@@ -27,6 +29,7 @@ public class LikeService {
     private final LikeCommentRepository likeCommentRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public LikeResponseDto createLikePost(Long postId, UserEntity user) {
@@ -35,6 +38,10 @@ public class LikeService {
         if (likePostRepository.findByUserAndPostId(user, postId).orElse(null) != null) {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_LIKE_POST);
         }
+
+        UserEntity postWriter = post.getUser();
+        postWriter.addPoint(Point.GET_POST_LIKE);
+        userRepository.save(postWriter);
 
         LikePostEntity likePost = LikePostEntity.builder()
                 .user(user)
@@ -50,7 +57,7 @@ public class LikeService {
 
     @Transactional
     public void deleteLikePost(Long postId, UserEntity user) {
-        postRepository.findById(postId)
+        PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_POST));
         LikePostEntity like = likePostRepository.findByUserAndPostId(user, postId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE_POST));
@@ -58,6 +65,10 @@ public class LikeService {
         if (!user.equals(like.getUser())) {
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
         }
+
+        UserEntity postWriter = post.getUser();
+        postWriter.addPoint(Point.CANCEL_POST_LIKE);
+        userRepository.save(postWriter);
 
         likePostRepository.delete(like);
     }
@@ -83,6 +94,10 @@ public class LikeService {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_LIKE_COMMENT);
         }
 
+        UserEntity commentWriter = comment.getUser();
+        commentWriter.addPoint(Point.GET_COMMENT_LIKE);
+        userRepository.save(commentWriter);
+
         LikeCommentEntity likeComment = LikeCommentEntity.builder()
                 .user(user)
                 .comment(comment)
@@ -97,7 +112,7 @@ public class LikeService {
 
     @Transactional
     public void deleteLikeComment(Long commentId, UserEntity user) {
-        commentRepository.findById(commentId)
+        CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
         LikeCommentEntity like = likeCommentRepository.findByUserAndCommentId(user, commentId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_LIKE_COMMENT));
@@ -105,6 +120,10 @@ public class LikeService {
         if (!user.equals(like.getUser())) {
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
         }
+
+        UserEntity commentWriter = comment.getUser();
+        commentWriter.addPoint(Point.CANCEL_COMMENT_LIKE);
+        userRepository.save(commentWriter);
 
         likeCommentRepository.delete(like);
     }
