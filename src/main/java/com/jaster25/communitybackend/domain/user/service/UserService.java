@@ -1,13 +1,14 @@
 package com.jaster25.communitybackend.domain.user.service;
 
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.dto.AuthResponseDto;
 import com.jaster25.communitybackend.domain.user.dto.UserRequestDto;
-import com.jaster25.communitybackend.domain.user.dto.UserResponseDto;
 import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.config.security.UserAdapter;
 import com.jaster25.communitybackend.global.exception.ErrorCode;
 import com.jaster25.communitybackend.global.exception.custom.DuplicatedValueException;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
+import com.jaster25.communitybackend.global.util.AmazonS3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,17 +16,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+    private final AmazonS3Util amazonS3Util;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+    public AuthResponseDto createUser(UserRequestDto userRequestDto) {
         if (userRepository.findByUsername(userRequestDto.getId()).orElse(null) != null) {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_USER_ID);
         }
@@ -38,18 +41,15 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(userEntity);
 
-        return UserResponseDto.builder()
-                .id(userEntity.getUsername())
-                .build();
+        return AuthResponseDto.of(userEntity);
     }
 
-    public UserResponseDto getUser(String username) {
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
-
-        return UserResponseDto.builder()
-                .id(userEntity.getUsername())
-                .build();
+    @Transactional
+    public AuthResponseDto updateProfileImage(MultipartFile multipartFile, UserEntity user) {
+        String url = amazonS3Util.upload(multipartFile);
+        user.updateProfileImageUrl(url);
+        userRepository.save(user);
+        return AuthResponseDto.of(user);
     }
 
     @Override

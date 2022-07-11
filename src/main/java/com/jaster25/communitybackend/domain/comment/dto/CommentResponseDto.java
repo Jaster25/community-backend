@@ -15,6 +15,7 @@ public class CommentResponseDto {
 
     private final Long id;
     private final String writer;
+    private final String profileImageUrl;
     private final String content;
     private final Boolean isDeleted;
     private final Boolean canDelete;
@@ -26,9 +27,10 @@ public class CommentResponseDto {
     private final LocalDateTime updatedAt;
 
     @Builder
-    private CommentResponseDto(Long id, String writer, String content, Boolean isDeleted, Boolean canDelete, int likeCount, List<CommentResponseDto> children, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private CommentResponseDto(Long id, String writer, String profileImageUrl, String content, Boolean isDeleted, Boolean canDelete, int likeCount, List<CommentResponseDto> children, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.writer = writer;
+        this.profileImageUrl = profileImageUrl;
         this.content = content;
         this.isDeleted = isDeleted;
         this.canDelete = canDelete;
@@ -42,6 +44,7 @@ public class CommentResponseDto {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .writer(comment.getUser().getUsername())
+                .profileImageUrl(comment.getUser().getProfileImageUrl())
                 .content(comment.getContent())
                 .isDeleted(comment.isDeleted())
                 .canDelete(user != null && (user.equals(comment.getUser()) || user.isAdmin()))

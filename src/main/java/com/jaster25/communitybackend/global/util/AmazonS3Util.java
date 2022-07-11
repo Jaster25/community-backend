@@ -38,7 +38,7 @@ public class AmazonS3Util {
     }
 
     public static String generateFileName(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
             throw new FileUploadException(ErrorCode.EMPTY_FILE);
         }
 

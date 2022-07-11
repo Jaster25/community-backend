@@ -1,10 +1,11 @@
 create table users
 (
-    user_id    uuid         not null,
-    password   varchar(255) not null,
-    username   varchar(255) not null,
-    created_at timestamp,
-    updated_at timestamp,
+    user_id           uuid         not null,
+    password          varchar(255) not null,
+    username          varchar(255) not null,
+    profile_image_url varchar(255),
+    created_at        timestamp,
+    updated_at        timestamp,
     primary key (user_id)
 );
 

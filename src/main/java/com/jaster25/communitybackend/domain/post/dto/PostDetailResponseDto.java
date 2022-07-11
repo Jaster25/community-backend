@@ -12,6 +12,7 @@ public class PostDetailResponseDto {
 
     private final Long id;
     private final String writer;
+    private final String profileImageUrl;
     private final String title;
     private final String content;
     private final int viewCount;
@@ -21,9 +22,10 @@ public class PostDetailResponseDto {
     private final LocalDateTime updatedAt;
 
     @Builder
-    private PostDetailResponseDto(Long id, String writer, String title, String content, int viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private PostDetailResponseDto(Long id, String writer, String profileImageUrl, String title, String content, int viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.writer = writer;
+        this.profileImageUrl = profileImageUrl;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
@@ -35,6 +37,7 @@ public class PostDetailResponseDto {
         return PostDetailResponseDto.builder()
                 .id(post.getId())
                 .writer(post.getUser().getUsername())
+                .profileImageUrl(post.getUser().getProfileImageUrl())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .viewCount(post.getViewCount())

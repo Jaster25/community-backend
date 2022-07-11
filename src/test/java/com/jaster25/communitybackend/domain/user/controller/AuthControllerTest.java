@@ -60,7 +60,7 @@ class AuthControllerTest {
 
             // then
             result.andExpect(status().isOk())
-                    .andExpect(jsonPath("$.username").value("user1"))
+                    .andExpect(jsonPath("$.id").value("user1"))
                     .andExpect(jsonPath("$.roles").value(Role.ROLE_USER.toString()));
         }
 
@@ -74,7 +74,7 @@ class AuthControllerTest {
 
             // then
             result.andExpect(status().isOk())
-                    .andExpect(jsonPath("$.username").value("admin1"))
+                    .andExpect(jsonPath("$.id").value("admin1"))
                     .andExpect(jsonPath("$.roles.size()").value(2))
                     .andExpect(jsonPath("$.roles[0]").value(Role.ROLE_USER.toString()))
                     .andExpect(jsonPath("$.roles[1]").value(Role.ROLE_ADMIN.toString()));
@@ -89,7 +89,7 @@ class AuthControllerTest {
 
             // then
             result.andExpect(status().isOk())
-                    .andExpect(jsonPath("$.username").doesNotExist())
+                    .andExpect(jsonPath("$.id").doesNotExist())
                     .andExpect(jsonPath("$.roles").doesNotExist());
         }
     }
