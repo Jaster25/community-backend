@@ -82,7 +82,7 @@ class CommentControllerTest {
                     .build();
 
             // when
-            ResultActions result = mvc.perform(post(PREFIX_URL + "/1")
+            ResultActions result = mvc.perform(post(PREFIX_URL + "/1?parentId=1")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("UTF-8")
                     .content(objectMapper.writeValueAsString(commentRequestDto)));

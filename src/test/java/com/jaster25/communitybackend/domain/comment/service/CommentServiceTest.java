@@ -11,6 +11,7 @@ import com.jaster25.communitybackend.domain.user.domain.Role;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
+import com.jaster25.communitybackend.global.exception.custom.UnAuthenticatedException;
 import com.jaster25.communitybackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -190,7 +191,7 @@ class CommentServiceTest {
             assertFalse(commentsResponseDto.getComments().get(1).getCanDelete());
             assertTrue(commentsResponseDto.getComments().get(2).getCanDelete());
         }
-        
+
         @DisplayName("성공 - 비로그인")
         @Test
         void success_notLoggedIn() throws Exception {
@@ -223,6 +224,34 @@ class CommentServiceTest {
             assertFalse(commentsResponseDto.getComments().get(0).getCanDelete());
             assertFalse(commentsResponseDto.getComments().get(1).getCanDelete());
             assertFalse(commentsResponseDto.getComments().get(2).getCanDelete());
+        }
+
+        @DisplayName("성공 - 댓글 더 불러오기(ID < 3)")
+        @Test
+        void success_idLessThan3() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            CommentEntity comment2 = CommentEntity.builder()
+                    .user(user2)
+                    .post(post1)
+                    .content("댓글 내용2")
+                    .build();
+            given(postRepository.findById(anyLong()))
+                    .willReturn(Optional.of(post1));
+            given(commentRepository.findAllByPostIdAndIdLessThanAndParentIsNullOrderByIdDesc(any(Pageable.class), anyLong(), anyLong()))
+                    .willReturn(new PageImpl<>(List.of(comment1, comment2)));
+
+            // when
+            CommentsResponseDto commentsResponseDto = commentService.getComments(1L, user1, 3L, 10);
+
+            // then
+            assertEquals(2, commentsResponseDto.getComments().size());
+            assertTrue(commentsResponseDto.getComments().get(0).getCanDelete());
+            assertFalse(commentsResponseDto.getComments().get(1).getCanDelete());
         }
 
         @DisplayName("실패 - 존재하지 않는 게시물 ID")
@@ -369,6 +398,33 @@ class CommentServiceTest {
             verify(commentRepository, times(1)).delete(any(CommentEntity.class));
         }
 
+        @DisplayName("성공 - 부모 댓글이 존재하는 댓글 삭제")
+        @Test
+        void success_hasParentComment() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            CommentEntity comment2 = CommentEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .parent(comment1)
+                    .content("대댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment2));
+
+            // when
+            commentService.deleteComment(2L, user1);
+
+            // then
+            verify(commentRepository, times(1)).findById(anyLong());
+            verify(commentRepository, times(1)).delete(any(CommentEntity.class));
+            assertEquals(0, comment1.getChildren().size());
+        }
+
         @DisplayName("실패 - 존재하지 않는 댓글 ID")
         @Test
         void failure_nonExistentParentCommentId() throws Exception {
@@ -380,6 +436,24 @@ class CommentServiceTest {
             // then
             assertThrows(NonExistentException.class,
                     () -> commentService.deleteComment(1L, user1));
+        }
+
+        @DisplayName("실패 - 비로그인")
+        @Test
+        void failure_notLoggedIn() throws Exception {
+            // given
+            CommentEntity comment1 = CommentEntity.builder()
+                    .user(user2)
+                    .post(post1)
+                    .content("댓글 내용1")
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+
+            // when
+            // then
+            assertThrows(UnAuthenticatedException.class,
+                    () -> commentService.deleteComment(1L, null));
         }
 
         @DisplayName("실패 - 다른 작성자")
