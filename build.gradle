@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.jaster25'
@@ -54,6 +55,67 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+// Jacoco
+jacoco {
+	toolVersion = '0.8.7'
 }
+
+test {
+	useJUnitPlatform()
+	finalizedBy("jacocoTestReport")
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.enabled true
+		csv.enabled true
+		xml.enabled false
+//		html.destination file("src/jacoco/jacoco.html")
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [
+							'**/CommunityBackendApplication*',
+							'**/dto/*',
+							'**/domain/*/domain/**',
+							'**/global/**',
+					])
+				})
+		)
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = "CLASS"
+			enabled = true
+
+			// 브랜치 커버리지를 최소한 90% 만족시켜야 합니다.
+			limit {
+				counter = "BRANCH"
+				value = "COVEREDRATIO"
+				minimum = 0.90
+			}
+
+			// 라인 커버리지를 최소한 60% 만족시켜야 합니다.
+			limit {
+				counter = "LINE"
+				value = "COVEREDRATIO"
+				minimum = 0.60
+			}
+
+			excludes = [
+					'**.CommunityBackendApplication*',
+					'**.dto.*',
+					'**.domain.*.domain.**',
+					'**.global.**',
+			]
+		}
+	}
+}
+
