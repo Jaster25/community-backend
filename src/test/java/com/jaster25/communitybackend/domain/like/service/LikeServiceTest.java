@@ -10,6 +10,7 @@ import com.jaster25.communitybackend.domain.like.repository.LikePostRepository;
 import com.jaster25.communitybackend.domain.post.domain.PostEntity;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.custom.DuplicatedValueException;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,8 @@ class LikeServiceTest {
     private PostRepository postRepository;
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private UserRepository userRepository;
 
     private UserEntity user1;
     private PostEntity post1;

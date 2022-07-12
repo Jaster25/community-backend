@@ -38,15 +38,18 @@ public class UserEntity extends BaseTimeEntity {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    private int point = 0;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Builder
-    public UserEntity(UUID id, String username, String password, String profileImageUrl) {
+    public UserEntity(UUID id, String username, String password, String profileImageUrl, int point) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.profileImageUrl = profileImageUrl;
+        this.point = point;
         this.roles.add(Role.ROLE_USER);
     }
 
@@ -60,5 +63,9 @@ public class UserEntity extends BaseTimeEntity {
 
     public void updateProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public void addPoint(Point gainedPoint) {
+        point += gainedPoint.getPoint();
     }
 }

@@ -7,6 +7,7 @@ import com.jaster25.communitybackend.domain.post.dto.PostsResponseDto;
 import com.jaster25.communitybackend.domain.post.repository.PostRepository;
 import com.jaster25.communitybackend.domain.user.domain.Role;
 import com.jaster25.communitybackend.domain.user.domain.UserEntity;
+import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
 import com.jaster25.communitybackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,8 @@ class PostServiceTest {
     private PostService postService;
     @Mock
     private PostRepository postRepository;
+    @Mock
+    private UserRepository userRepository;
 
     private UserEntity user1;
     private UserEntity user2;
