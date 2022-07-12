@@ -13,6 +13,7 @@ import com.jaster25.communitybackend.domain.user.domain.UserEntity;
 import com.jaster25.communitybackend.domain.user.repository.UserRepository;
 import com.jaster25.communitybackend.global.exception.custom.DuplicatedValueException;
 import com.jaster25.communitybackend.global.exception.custom.NonExistentException;
+import com.jaster25.communitybackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -48,6 +49,7 @@ class LikeServiceTest {
     private UserRepository userRepository;
 
     private UserEntity user1;
+    private UserEntity user2;
     private PostEntity post1;
     private CommentEntity comment1;
 
@@ -55,6 +57,10 @@ class LikeServiceTest {
     public void setup() {
         user1 = UserEntity.builder()
                 .username("user1")
+                .password("1234")
+                .build();
+        user2 = UserEntity.builder()
+                .username("user2")
                 .password("1234")
                 .build();
         post1 = PostEntity.builder()
@@ -176,6 +182,25 @@ class LikeServiceTest {
             // then
             assertThrows(NonExistentException.class,
                     () -> likeService.deleteLikePost(1L, user1));
+        }
+
+        @DisplayName("실패 - 다른 사용자")
+        @Test
+        void failure_otherUser() throws Exception {
+            // given
+            LikePostEntity like1 = LikePostEntity.builder()
+                    .user(user1)
+                    .post(post1)
+                    .build();
+            given(postRepository.findById(anyLong()))
+                    .willReturn(Optional.of(post1));
+            given(likePostRepository.findByUserAndPostId(any(UserEntity.class), anyLong()))
+                    .willReturn(Optional.of(like1));
+
+            // when
+            // then
+            assertThrows(UnAuthorizedException.class,
+                    () -> likeService.deleteLikePost(1L, user2));
         }
     }
 
@@ -344,6 +369,25 @@ class LikeServiceTest {
             // then
             assertThrows(NonExistentException.class,
                     () -> likeService.deleteLikeComment(1L, user1));
+        }
+
+        @DisplayName("실패 - 다른 사용자")
+        @Test
+        void failure_otherUser() throws Exception {
+            // given
+            LikeCommentEntity like1 = LikeCommentEntity.builder()
+                    .user(user1)
+                    .comment(comment1)
+                    .build();
+            given(commentRepository.findById(anyLong()))
+                    .willReturn(Optional.of(comment1));
+            given(likeCommentRepository.findByUserAndCommentId(any(UserEntity.class), anyLong()))
+                    .willReturn(Optional.of(like1));
+
+            // when
+            // then
+            assertThrows(UnAuthorizedException.class,
+                    () -> likeService.deleteLikeComment(1L, user2));
         }
     }
 
