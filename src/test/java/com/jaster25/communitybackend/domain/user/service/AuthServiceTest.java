@@ -40,6 +40,35 @@ class AuthServiceTest {
 
     @DisplayName("사용자 정보 조회")
     @Nested
+    class GetAuthTest {
+        @DisplayName("성공")
+        @Test
+        void success() throws Exception {
+            // given
+            // when
+            AuthResponseDto authResponseDto = authService.getAuth(user1);
+
+            // then
+            assertEquals(user1.getUsername(), authResponseDto.getId());
+            assertEquals(user1.getRoles().size(), authResponseDto.getRoles().size());
+        }
+
+        @DisplayName("성공 - 비로그인")
+        @Test
+        void success_notLoggedIn() throws Exception {
+            // given
+            // when
+            AuthResponseDto authResponseDto = authService.getAuth(null);
+
+            // then
+            assertNull(authResponseDto.getId());
+            assertNull(authResponseDto.getRoles());
+            assertNull(authResponseDto.getProfileImageUrl());
+        }
+    }
+
+    @DisplayName("사용자 정보 조회")
+    @Nested
     class GetAuthApiTest {
         @DisplayName("성공")
         @Test
