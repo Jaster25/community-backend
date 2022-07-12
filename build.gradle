@@ -81,6 +81,7 @@ jacocoTestReport {
 							'**/CommunityBackendApplication*',
 							'**/dto/*',
 							'**/domain/*/domain/**',
+							'**/AuthService*',
 							'**/global/**',
 					])
 				})
@@ -113,6 +114,7 @@ jacocoTestCoverageVerification {
 					'**.CommunityBackendApplication*',
 					'**.dto.*',
 					'**.domain.*.domain.**',
+					'**.AuthService*',
 					'**.global.**',
 			]
 		}

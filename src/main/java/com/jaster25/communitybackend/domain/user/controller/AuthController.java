@@ -32,10 +32,4 @@ public class AuthController {
         TokenResponseDto tokenResponseDto = authService.logIn(logInRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(tokenResponseDto);
     }
-
-    @GetMapping("/logout")
-    public ResponseEntity<Void> logOutApi(@CurrentUser UserEntity user) {
-        // TODO
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 }
