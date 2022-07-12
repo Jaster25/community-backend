@@ -2,13 +2,14 @@
 
 #### *뱃지 나열*
 - Build
+  - <img alt="Build" src="https://img.shields.io/github/workflow/status/jaster25/community-backend/main.yml"/>
 - Test Code Coverage
+- PR closed
+  - <img alt="PR closed" src="https://img.shields.io/github/issues-pr-closed/jaster25/community-backend"/>
 - Issues open
   - <img alt="Issues open" src="https://img.shields.io/github/issues/jaster25/community-backend"/>
 - Issues closed
   - <img alt="Issues closed" src="https://img.shields.io/github/issues-closed/jaster25/community-backend"/>
-- PR closed
-  - <img alt="PR closed" src="https://img.shields.io/github/issues-pr-closed/jaster25/community-backend"/>
 - License MIT
   - <img alt="License MIT" src="https://img.shields.io/github/license/jaster25/community-backend"/>
 
