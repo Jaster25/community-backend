@@ -3,6 +3,7 @@ package com.jaster25.communitybackend.domain.user.domain;
 import com.jaster25.communitybackend.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,7 +22,8 @@ public class UserEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "user_id", columnDefinition = "uuid")
+    @Type(type = "uuid-char")
+    @Column(name = "user_id")
     private UUID id;
 
     @Column(nullable = false, unique = true)
