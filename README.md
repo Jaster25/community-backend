@@ -1,13 +1,18 @@
 # Community Backend
 
-<p>
-    <img alt="Build" src="https://img.shields.io/github/workflow/status/jaster25/community-backend/main.yml"/>
-    <!-- TODO: Test Code Coverage -->
-    <img alt="PR closed" src="https://img.shields.io/github/issues-pr-closed/jaster25/community-backend"/>
-    <img alt="Issues open" src="https://img.shields.io/github/issues/jaster25/community-backend"/>
-    <img alt="Issues closed" src="https://img.shields.io/github/issues-closed/jaster25/community-backend"/>
-    <img alt="License MIT" src="https://img.shields.io/github/license/jaster25/community-backend"/>
-</p>
+![Build](https://img.shields.io/github/workflow/status/jaster25/community-backend/main.yml)
+![LINE](https://img.shields.io/badge/line--coverage-97.93%25-brightgreen.svg)
+![BRANCH](https://img.shields.io/badge/branch--coverage-95.45%25-brightgreen.svg)
+![PR closed](https://img.shields.io/github/issues-pr-closed/jaster25/community-backend)
+![Issues open](https://img.shields.io/github/issues/jaster25/community-backend)
+![Issues closed](https://img.shields.io/github/issues-closed/jaster25/community-backend)
+![License MIT](https://img.shields.io/github/license/jaster25/community-backend)
+
+[//]: # (![LINE]&#40;http://line.coverage.link&#41;)
+[//]: # (![BRANCH]&#40;http://branch.coverage.link&#41;)
+[//]: # (JASYPT_PASSWORD=$JASYPT_PASSWORD ./gradlew jacocoTestReport generateJacocoBadge)
+
+
 
 간단한 커뮤니티를 구현한 개인 프로젝트입니다.
 
